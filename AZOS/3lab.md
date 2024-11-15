@@ -50,6 +50,62 @@ lines 1-20/20 (END)
 #### 1. Перечислите команды, которые использовались на каждом этапе.
 
 ```
+sudo apt install nginx
+sudo systemctl start nginx
+sudo systemctl status nginx
+```
+
+```
+sudo nano /etc/nginx/nginx.conf
+sudo cat /etc/nginx/nginx.conf
+```
+
+```
+sudo mkdir -p /var/www/site1.com/html
+sudo mkdir -p /var/www/site2.com/html
+sudo chown -R $USER:$USER /var/www/site1.com/html
+sudo chown -R $USER:$USER /var/www/site2.com/html
+```
+
+```
+echo "<html><body><h1>Welcome to Site 1!</h1></body></html>" | sudo tee /var/www/site1.com/html/index.html
+echo "<html><body><h1>Welcome to Site 2!</h1></body></html>" | sudo tee /var/www/site2.com/html/index.html
+```
+
+```
+sudo nano /etc/nginx/sites-available/site1.com
+
+Вставляем
+server {
+    listen 80;
+    server_name site1.com www.site1.com;
+    root /var/www/site1.com/html;
+    index index.html;
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+
+sudo nano /etc/nginx/sites-available/site2.com
+
+Вставляем
+server {
+    listen 80;
+    server_name site2.com www.site2.com;
+    root /var/www/site2.com/html;
+    index index.html;
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+```
+
+```
+sudo ln -s /etc/nginx/sites-available/site1.com /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/site2.com /etc/nginx/sites-enabled/
+sudo systemctl reload nginx
+sudo nano /etc/hosts
+sudo cat /etc/hosts
 ```
 
 ---
@@ -69,6 +125,11 @@ lines 1-20/20 (END)
 #### 3. Конфигурационные файлы настроенных серверных блоков.
 
 ```
+sudo cat /etc/nginx/sites-available/site1.com
+```
+
+```
+sudo cat /etc/nginx/sites-available/site2.com
 ```
 
 ---
