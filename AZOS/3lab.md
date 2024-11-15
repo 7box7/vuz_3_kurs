@@ -55,10 +55,6 @@ sudo systemctl start nginx
 sudo systemctl status nginx
 ```
 
-```
-sudo nano /etc/nginx/nginx.conf
-sudo cat /etc/nginx/nginx.conf
-```
 
 ```
 sudo mkdir -p /var/www/site1.com/html
@@ -104,32 +100,52 @@ server {
 sudo ln -s /etc/nginx/sites-available/site1.com /etc/nginx/sites-enabled/
 sudo ln -s /etc/nginx/sites-available/site2.com /etc/nginx/sites-enabled/
 sudo systemctl reload nginx
-sudo nano /etc/hosts
-sudo cat /etc/hosts
+takb@takb:/var/www/takb.com$ sudo cat /etc/hosts
+127.0.0.1 site1.com
+127.0.0.1 site2.com
+
 ```
 
 ---
 
 #### 2. Скриншоты страниц, демонстрирующие работу сайтов site1.com и site2.com.
 
-```
-<screenshot> from site1.com
-```
+![alt text](image-2.png)
 
-```
-<screenshot> from site2.com
-```
-
+![alt text](image-1.png)
 ---
 
 #### 3. Конфигурационные файлы настроенных серверных блоков.
 
 ```
-sudo cat /etc/nginx/sites-available/site1.com
+takb@takb:/var/www/takb.com$ sudo cat /etc/nginx/sites-available/site1.com
+server {
+    listen 443 ssl;
+    server_name site1.com;
+    ssl_certificate /etc/ssl/certs/nginx-selfsigned.crt;
+    ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key;
+    root /var/www/site1.com/html;
+    index index.html;
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+
 ```
 
 ```
-sudo cat /etc/nginx/sites-available/site2.com
+takb@takb:/var/www/takb.com$ sudo cat /etc/nginx/sites-available/site2.com
+server {
+    listen 443 ssl;
+    server_name site2.com;
+    ssl_certificate /etc/ssl/certs/nginx-selfsigned.crt;
+    ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key;
+    root /var/www/site2.com/html;
+    index index.html;
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
 ```
 
 ---
