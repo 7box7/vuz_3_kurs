@@ -1,11 +1,11 @@
-# Настройка почты
+# Mail setup 
 
 
-## 1. Работа Postfix и Dovecot:
+## 1. Postfix and Dovecot Setup
 
-### Работоспособность
+### Available
 ```bash
-~ ❯ sudo systemctl status postfix                                                                                                                                                                  20:21:27
+~ ❯ sudo systemctl status postfix                                                                                                                                                                
 sudo systemctl status dovecot
 ● postfix.service - Postfix Mail Transport Agent
      Loaded: loaded (/usr/lib/systemd/system/postfix.service; enabled; preset: enabled)
@@ -38,10 +38,10 @@ sudo systemctl status dovecot
 ~ ❯   
 ```  
 
-### Порты
+### Ports
 
 ```bash
-~ ❯ netstat -tuln | grep -E '25|143|110'                                                                                                                                                           20:22:32
+~ ❯ netstat -tuln | grep -E '25|143|110'                                                                                                                                                        
 tcp        0      0 0.0.0.0:143             0.0.0.0:*               LISTEN     
 tcp        0      0 0.0.0.0:25              0.0.0.0:*               LISTEN     
 tcp        0      0 0.0.0.0:110             0.0.0.0:*               LISTEN     
@@ -56,7 +56,62 @@ udp6       0      0 :::52548                :::*
 ~ ❯    
 ```
 
-## 2. Настроенные почтовые учетные записи
+## 2. Account setup
+
+### User's mail folder
+
+```bash
+~ ❯ sudo ls /home/user1/mail                                         
+cur			dovecot-uidlist		      maildirfolder
+dovecot.index.log	dovecot-uidvalidity	      new
+dovecot.list.index.log	dovecot-uidvalidity.675b538d  tmp
+~ ❯ sudo ls /home/user2/mail                                          
+cur			dovecot-uidlist		      maildirfolder
+dovecot.index.log	dovecot-uidvalidity	      new
+dovecot.list.index.log	dovecot-uidvalidity.675b5564  tmp
+~ ❯    
+```
+
+## 3. SSL
+
+## 4. Config check
+
+No errors
+
+```bash
+~ ❯ sudo postfix check         
+sudo dovecot reload
+~ ❯        
+```
+
+## Get and post mails
+
+```bash
+~ ❯ echo "Это тестовое письмо" | mail -s "Тестовое письмо" user1@mail.vmss.local
+~ ❯ sudo ls /home/user1/mail/new                                      
+1734039864.V10308I160a522M616185.mail.vmss.local
+```
+
+![sendmail](image-3.png)
+
+Logs
+
+```bash
+~ ❯ sudo tail -f /var/log/mail.log                                     00:51:20
+2024-12-13T00:44:24.623136+03:00 mail postfix/qmgr[35510]: 90C909676E2: removed
+2024-12-13T00:44:52.890118+03:00 mail dovecot: pop3-login: Login: user=<user1>, method=PLAIN, rip=192.168.1.27, lip=192.168.1.27, mpid=63754, secured, session=<5ibWnxkptsbAqAEb>
+2024-12-13T00:44:52.997505+03:00 mail dovecot: pop3(user1)<63754><5ibWnxkptsbAqAEb>: Disconnected: Logged out top=0/0, retr=1/522, del=0/3, size=1901
+2024-12-13T00:45:55.568655+03:00 mail dovecot: pop3-login: Login: user=<user1>, method=PLAIN, rip=192.168.1.27, lip=192.168.1.27, mpid=64619, secured, session=<dp2SoxkpbMjAqAEb>
+2024-12-13T00:45:55.577238+03:00 mail dovecot: pop3(user1)<64619><dp2SoxkpbMjAqAEb>: Disconnected: Logged out top=0/0, retr=0/0, del=0/3, size=1901
+2024-12-13T00:47:46.168990+03:00 mail dovecot: pop3-login: Login: user=<user2>, method=PLAIN, rip=192.168.1.27, lip=192.168.1.27, mpid=66140, secured, session=<EXAqqhkp4qnAqAEb>
+2024-12-13T00:47:46.190271+03:00 mail dovecot: pop3(user2)<66140><EXAqqhkp4qnAqAEb>: Disconnected: Logged out top=0/0, retr=0/0, del=0/1, size=673
+2024-12-13T00:48:03.908780+03:00 mail dovecot: master: Warning: SIGHUP received - reloading configuration
+2024-12-13T00:50:57.257600+03:00 mail dovecot: pop3-login: Login: user=<user1>, method=PLAIN, rip=127.0.0.1, lip=127.0.0.1, mpid=69023, TLS, session=<Sz6OtRkp6LZ/AAAB>
+2024-12-13T00:50:57.332770+03:00 mail dovecot: pop3(user1)<69023><Sz6OtRkp6LZ/AAAB>: Disconnected: Logged out top=0/0, retr=1/522, del=0/3, size=1901
+```
+
+
+
 
 
 
