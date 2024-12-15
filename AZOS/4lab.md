@@ -45,8 +45,43 @@ subnet 192.168.1.0 netmask 255.255.255.0 {
 ```
 
 ### Assigning IP-addresses to clients
+
+```bash
+astravmuser@astravm:~$ ip addr
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 08:00:27:31:a3:e7 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.106.50/24 brd 192.168.106.255 scope global noprefixroute eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::643e:22c9:9efd:966a/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+astravmuser@astravm:~$ 
+```
+
 ### Assigning static IP-address
-### Check logs 
+
+```bash
+astravmuser@astravm:~$ ip addr
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 08:00:27:31:a3:e7 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.106.50/24 brd 192.168.106.255 scope global noprefixroute eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::643e:22c9:9efd:966a/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+astravmuser@astravm:~$ 
+``` 
+
 
 ## Task 2. Install DNS-server
 
@@ -169,9 +204,60 @@ Address: 2a00:1450:4010:c0e::64
 ## Task 3. Install FreeIPA-server 
 
 ### Available FreeIPA-server
+```bash
+astravmuser@astravm:~$ sudo ipactl status
+[sudo] пароль для astravmuser: 
+Попробуйте ещё раз.
+[sudo] пароль для astravmuser: 
+Directory Service: RUNNING
+krb5kdc Service: RUNNING
+kadmin Service: RUNNING
+named Service: RUNNING
+httpd Service: RUNNING
+ipa-custodia Service: RUNNING
+pki-tomcatd Service: RUNNING
+ipa-otpd Service: RUNNING
+ipa-dnskeysyncd Service: RUNNING
+ipa: INFO: The ipactl command was successful
+```
 ### Available Samba-server
+
+```bash
+  GNU nano 3.2                                                                     /etc/samba/smb.conf                                                                               
+
+### Added by IPA Installer ###
+#         DO NOT EDIT        #
+[global]
+debug pid = yes
+state directory = /var/lib/samba
+cache directory = /var/lib/samba
+include = registry
+```
+
 ### Available Kerberos-auth
+```bash
+astravmuser@astravm:~$ ipa group-add vmss
+-----------------------
+Добавлена группа "vmss"
+-----------------------
+  Имя группы: vmss
+  ID группы: 506800004
+astravmuser@astravm:~$ ipa group-add-member vmss --users=vmss1, --user=vmss2
+  Имя группы: vmss
+  ID группы: 506800004
+  Ошибка участников: 
+    member user: vmss1,: no such entry
+    member user: vmss2: no such entry
+    member group: 
+    member service: 
+    member User ID override: 
+-----------------------------------
+Количество добавленных участников 0
+-----------------------------------
+astravmuser@astravm:~$ 
+```
 ### Allow to common folder
+
 ### Check logs
 
 
